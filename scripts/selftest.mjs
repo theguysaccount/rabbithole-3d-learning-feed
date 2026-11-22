@@ -46,11 +46,12 @@ const STUB = `(() => {
       node.replaceWith(this.box); this.o = o; this.video = o.videoId; this.calls = [["create", { videoId: o.videoId, host: o.host, playerVars: o.playerVars }]];
       S.players.push(this); setTimeout(() => o.events && o.events.onReady && o.events.onReady({ target: this }), 30);
     }
-    loadVideoById(a) { this.calls.push(["load", a]); this.video = a.videoId; this.box.textContent = "video " + a.videoId; setTimeout(() => this.o.events.onStateChange({ data: 1, target: this }), 20); }
+    loadVideoById(a) { this.calls.push(["load", a]); this.video = a.videoId; this.box.textContent = "video " + a.videoId; clearTimeout(this.pending); this.pending = setTimeout(() => this.o.events.onStateChange({ data: 1, target: this }), 20); }
     cueVideoById(a) { this.calls.push(["cue", a]); this.video = a.videoId; this.box.textContent = "video " + a.videoId; }
     destroy() { this.box.remove(); }
     end() { this.o.events.onStateChange({ data: 0, target: this }); }
-    fail(code) { this.o.events.onError({ data: code, target: this }); }
+    // Like the real player: a video that errors never then reports "playing".
+    fail(code) { clearTimeout(this.pending); this.o.events.onError({ data: code, target: this }); }
   } };
   setTimeout(() => window.onYouTubeIframeAPIReady && window.onYouTubeIframeAPIReady(), 5);
 })();`;
@@ -177,6 +178,7 @@ try {
     if (afterId) check("player: after a side path ends, the main track continues", (await cur(page)) === afterId, await cur(page));
     // A video that can't be embedded: message, link to YouTube, and a skip.
     await page.evaluate(() => { document.querySelector(".rh-auto input").click(); window.__ytStub.players.at(-1).fail(150); });
+    await new Promise((r) => setTimeout(r, 150));   // the message must stay up, not flash
     const blocked = await page.evaluate(() => ({ shown: !document.querySelector(".rh-blocked").hidden, href: document.querySelector(".rh-blocked a").href }));
     check("player: an unplayable video says so and links to YouTube", blocked.shown && /^https:\/\/www\.youtube\.com\/watch\?v=/.test(blocked.href), blocked.href);
     check("player: no console errors", !errors.length, errors.join(" | "));
