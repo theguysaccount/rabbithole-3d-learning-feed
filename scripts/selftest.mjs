@@ -271,7 +271,8 @@ try {
     check("builder: no console errors", !real.length, real.join(" | "));
     check("builder: no requests to sites other than YouTube", !offsite.length, offsite.join(" "));
     await page.close();
-    const w = await open(shareUrl.replace(/^https?:\/\/[^/]+\/[^/]+\//, base));
+    // Open the link's "watch/#h=..." tail on the site under test; works on a project path and on a root domain.
+    const w = await open(base + shareUrl.slice(shareUrl.lastIndexOf("/watch/") + 1));
     await w.page.waitForFunction(() => document.querySelector(".rh")?.dataset.yt === "ready", { timeout: 20000 });
     const seen = await w.page.evaluate(() => ({ title: document.querySelector(".rh-hole-title").textContent, items: document.querySelectorAll(".rh-map li").length }));
     check("watch: the shared link opens the same path", seen.title === built.title && seen.items === count(built.track), `${seen.title}, ${seen.items} clips`);
