@@ -89,6 +89,10 @@ async function open(url, { mobile = false, stub = true } = {}) {
   return { page, errors, offsite, youtube, status: res?.status() };
 }
 
+// Videos the embed check found unplayable: the player skips them, so checks never expect them to load.
+const builtInfo = await fetch(base + "build.json", { cache: "no-store" }).then((r) => r.json()).catch(() => ({}));
+const bad = new Set(builtInfo.unavailable || []);
+const playable = (c) => !bad.has(c.yt);
 const holes = Object.fromEntries(fs.readdirSync(path.join(ROOT, "site/holes")).filter((f) => f.endsWith(".json")).map((f) => { const h = JSON.parse(fs.readFileSync(path.join(ROOT, "site/holes", f), "utf8")); return [h.slug, h]; }));
 const count = (t) => t.reduce((n, c) => n + 1 + (c.deeper ? count(c.deeper) : 0), 0);
 const cur = (page) => page.$eval(".rh", (r) => r.dataset.current);
@@ -145,17 +149,18 @@ try {
     await page.waitForFunction(() => document.querySelector(".rh")?.dataset.yt === "ready", { timeout: 20000 });
     const slug = await page.evaluate(() => JSON.parse(document.getElementById("hole-data").textContent).slug);
     const h = holes[slug];
-    check("player: shows the featured path's first clip", (await cur(page)) === h.track[0].id && (await stubVideo(page)) === h.track[0].yt, `${slug} / ${h.track[0].id}`);
+    check("player: shows the featured path's first clip", (await cur(page)) === h.track[0].id && (await page.evaluate(() => window.__ytStub.players[0].video)) === h.track[0].yt, `${slug} / ${h.track[0].id}`);
     check("player: uses YouTube's privacy-enhanced host", await page.evaluate(() => window.__ytStub.players[0].calls[0][1].host === "https://www.youtube-nocookie.com"));
     const mapItems = await page.$$eval(".rh-map li", (l) => l.length);
     check("player: the map lists every clip", mapItems === count(h.track), `${mapItems} of ${count(h.track)}`);
     await page.click('.rh-nav [data-go="next"]');
-    check("player: Next moves down the main track", (await cur(page)) === h.track[1].id && (await stubVideo(page)) === h.track[1].yt);
-    const withDeeper = h.track.findIndex((c) => c.deeper);
+    check("player: Next moves down the main track", (await cur(page)) === h.track[1].id && (!playable(h.track[1]) || (await stubVideo(page)) === h.track[1].yt));
+    let withDeeper = h.track.findIndex((c) => c.deeper && playable(c) && playable(c.deeper[0]));
+    if (withDeeper < 0) withDeeper = h.track.findIndex((c) => c.deeper);
     await page.evaluate((id) => window.__rabbithole.go(id, "nav"), h.track[withDeeper].id);
     await page.click('.rh-nav [data-go="deeper"]');
     const deep = h.track[withDeeper].deeper[0];
-    check("player: Go deeper enters the side path", (await cur(page)) === deep.id && (await stubVideo(page)) === deep.yt);
+    check("player: Go deeper enters the side path", (await cur(page)) === deep.id && (!playable(deep) || (await stubVideo(page)) === deep.yt));
     check("player: breadcrumbs show the way back", (await page.$eval(".rh-crumbs", (n) => n.textContent)).includes(h.track[withDeeper].title));
     check("player: the link remembers the position", (await page.evaluate(() => location.hash)).includes(`at=${deep.id}`));
     await page.click('.rh-nav [data-go="out"]');
