@@ -12,7 +12,7 @@ A rabbit hole can live on your own page: a course platform, a blog post, a docum
 In the builder (or under any player) press **Embed** and copy the snippet. It looks like this:
 
 ```
-<iframe src="https://theguysaccount.github.io/rabbithole-3d-learning-feed/embed/#h=…" title="…" width="560" height="900" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>
+<iframe src="{{site}}/embed/#h=…" title="…" width="560" height="900" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>
 ```
 
 The part after `#h=` is the whole path, so the embed keeps working even if you never come back to the builder.

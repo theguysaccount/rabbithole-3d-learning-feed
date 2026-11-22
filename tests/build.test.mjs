@@ -107,7 +107,12 @@ test("guides publish on their date and only published ones are listed", () => {
   const early = build("https://example.test", new Date(Date.parse(dates[0]) - 86400000).toISOString().slice(0, 10));
   try { assert.ok(!fs.existsSync(path.join(early.dir, "guides", guides[0].slug))); } finally { early.cleanup(); }
   const late = build("https://example.test", "2999-01-01");
-  try { for (const g of guides) assert.ok(fs.existsSync(path.join(late.dir, "guides", g.slug, "index.html")), g.slug); } finally { late.cleanup(); }
+  try {
+    for (const g of guides) assert.ok(fs.existsSync(path.join(late.dir, "guides", g.slug, "index.html")), g.slug);
+    // The address is one setting: no page names a different host for this site.
+    for (const f of htmlFiles(late.dir)) assert.ok(!/github\.io|\{\{site\}\}/.test(fs.readFileSync(f, "utf8")), path.relative(late.dir, f));
+    assert.match(fs.readFileSync(path.join(late.dir, "guides", "embed-a-video-path-on-your-site", "index.html"), "utf8"), /https:\/\/example\.test\/embed\/#h=/);
+  } finally { late.cleanup(); }
   const now = build("https://example.test", today);
   try {
     const sm = fs.readFileSync(path.join(now.dir, "sitemap.xml"), "utf8");

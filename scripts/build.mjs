@@ -249,7 +249,8 @@ write("/holes/", layout({
 for (const g of published) {
   const urlPath = `/guides/${g.slug}/`;
   const others = published.filter((x) => x.slug !== g.slug).slice(0, 4);
-  const html = markdown(g.body).replace(/\{\{root\}\}/g, "../../");
+  // {{site}} is this site's own address (BASE_URL), so guides never hard-code one.
+  const html = markdown(g.body.replaceAll("{{site}}", BASE)).replace(/\{\{root\}\}/g, "../../");
   const body = `<article class="prose">
 <p class="crumbs"><a href="../../">${NAME}</a> › <a href="../">Guides</a></p>
 <h1>${esc(g.title)}</h1>
