@@ -1,0 +1,18 @@
+{
+  "slug": "how-computers-work",
+  "title": "How computers work, from switches up",
+  "about": "Crash Course Computer Science's first seven episodes as one track, with a hands-on detour into building logic gates from transistors.",
+  "description": "A branching path from the abacus to the CPU with Crash Course Computer Science, plus Ben Eater's breadboard build of logic gates as a go-deeper side path.",
+  "track": [
+    { "id": "cc1", "yt": "O5nskjZ_GoI", "title": "Early computing", "note": "From the abacus to punch-card tabulating machines: why computing was mechanised in the first place." },
+    { "id": "cc2", "yt": "LN0ucKNX0hc", "title": "Electronic computing", "note": "Relays, vacuum tubes and transistors: switches that got faster and smaller." },
+    { "id": "cc3", "yt": "gI-qXk7XojA", "title": "Boolean logic and logic gates", "note": "AND, OR and NOT, built from those switches.",
+      "deeper": [
+        { "id": "be1", "yt": "sTu3LwpF6XI", "title": "Making logic gates from transistors (Ben Eater)", "note": "The same gates, built for real on a breadboard." }
+      ] },
+    { "id": "cc4", "yt": "1GSjbWt0c9M", "title": "Representing numbers and letters with binary", "note": "How ones and zeros stand for numbers, text and everything else." },
+    { "id": "cc5", "yt": "1I5ZMmrOfnA", "title": "How computers calculate: the ALU", "note": "Logic gates combined into a circuit that adds." },
+    { "id": "cc6", "yt": "fpnE6UAfbtU", "title": "Registers and RAM", "note": "Memory: circuits that hold a value until you change it." },
+    { "id": "cc7", "yt": "FZGugFqdr60", "title": "The central processing unit (CPU)", "note": "Everything so far, working together to run instructions." }
+  ]
+}

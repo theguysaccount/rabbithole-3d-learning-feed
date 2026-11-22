@@ -1,0 +1,16 @@
+{
+  "slug": "linear-algebra-visually",
+  "title": "Linear algebra, visually",
+  "about": "The first chapters of 3Blue1Brown's Essence of linear algebra, with a side path showing where matrices turn up next: neural networks.",
+  "description": "A branching path through 3Blue1Brown's Essence of linear algebra: vectors, span and basis, linear transformations, matrix multiplication and the determinant, with a go-deeper link to neural networks.",
+  "track": [
+    { "id": "v1", "yt": "fNk_zzaMoSs", "title": "Vectors", "note": "Three ways to think about a vector, and why the geometric one matters most here." },
+    { "id": "v2", "yt": "k7RM-ot2NWY", "title": "Linear combinations, span and basis vectors", "note": "Scaling and adding vectors, and the space they can reach." },
+    { "id": "v3", "yt": "kYB8IZa5AuE", "title": "Linear transformations and matrices", "note": "A matrix is a record of where the basis vectors land.",
+      "deeper": [
+        { "id": "v3a", "yt": "aircAruvnKk", "title": "Where matrices show up next: neural networks", "note": "Each layer of a neural network is one of these transformations." }
+      ] },
+    { "id": "v4", "yt": "XkY2DOUCWMU", "title": "Matrix multiplication as composition", "note": "Multiplying matrices means applying one transformation after another." },
+    { "id": "v5", "yt": "Ip3X9LOh2dk", "title": "The determinant", "note": "How much a transformation stretches or squashes area." }
+  ]
+}

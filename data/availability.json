@@ -1,0 +1,153 @@
+{
+ "checked": "2026-11-22T08:46:06.776Z",
+ "note": "Written by scripts/check-embeds.mjs from YouTube's oEmbed endpoint. ok:false means the video can't be played in an embedded player any more.",
+ "videos": {
+  "1GSjbWt0c9M": {
+   "ok": true,
+   "status": 200,
+   "title": "Representing Numbers and Letters with Binary: Crash Course Computer Science #4",
+   "author": "CrashCourse",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "1I5ZMmrOfnA": {
+   "ok": true,
+   "status": 200,
+   "title": "How Computers Calculate - the ALU: Crash Course Computer Science #5",
+   "author": "CrashCourse",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "9vKqVkMQHKk": {
+   "ok": true,
+   "status": 200,
+   "title": "The paradox of the derivative | Chapter 2, Essence of calculus",
+   "author": "3Blue1Brown",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "FZGugFqdr60": {
+   "ok": true,
+   "status": 200,
+   "title": "The Central Processing Unit (CPU): Crash Course Computer Science #7",
+   "author": "CrashCourse",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "IHZwWFHWa-w": {
+   "ok": true,
+   "status": 200,
+   "title": "Gradient descent, how neural networks learn | Deep Learning Chapter 2",
+   "author": "3Blue1Brown",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "Ilg3gGewQ5U": {
+   "ok": true,
+   "status": 200,
+   "title": "Backpropagation, intuitively | Deep Learning Chapter 3",
+   "author": "3Blue1Brown",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "Ip3X9LOh2dk": {
+   "ok": true,
+   "status": 200,
+   "title": "The determinant | Chapter 6, Essence of linear algebra",
+   "author": "3Blue1Brown",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "LN0ucKNX0hc": {
+   "ok": true,
+   "status": 200,
+   "title": "Electronic Computing: Crash Course Computer Science #2",
+   "author": "CrashCourse",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "O5nskjZ_GoI": {
+   "ok": true,
+   "status": 200,
+   "title": "Early Computing: Crash Course Computer Science #1",
+   "author": "CrashCourse",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "WUvTyaaNkzM": {
+   "ok": true,
+   "status": 200,
+   "title": "The essence of calculus",
+   "author": "3Blue1Brown",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "XkY2DOUCWMU": {
+   "ok": true,
+   "status": 200,
+   "title": "Matrix multiplication as composition | Chapter 4, Essence of linear algebra",
+   "author": "3Blue1Brown",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "aircAruvnKk": {
+   "ok": true,
+   "status": 200,
+   "title": "But what is a neural network? | Deep learning chapter 1",
+   "author": "3Blue1Brown",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "eMlx5fFNoYc": {
+   "ok": true,
+   "status": 200,
+   "title": "Attention in transformers, step-by-step | Deep Learning Chapter 6",
+   "author": "3Blue1Brown",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "fNk_zzaMoSs": {
+   "ok": true,
+   "status": 200,
+   "title": "Vectors | Chapter 1, Essence of linear algebra",
+   "author": "3Blue1Brown",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "fpnE6UAfbtU": {
+   "ok": true,
+   "status": 200,
+   "title": "Registers and RAM: Crash Course Computer Science #6",
+   "author": "CrashCourse",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "gI-qXk7XojA": {
+   "ok": true,
+   "status": 200,
+   "title": "Boolean Logic & Logic Gates: Crash Course Computer Science #3",
+   "author": "CrashCourse",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "k7RM-ot2NWY": {
+   "ok": true,
+   "status": 200,
+   "title": "Linear combinations, span, and basis vectors | Chapter 2, Essence of linear algebra",
+   "author": "3Blue1Brown",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "kYB8IZa5AuE": {
+   "ok": true,
+   "status": 200,
+   "title": "Linear transformations and matrices | Chapter 3, Essence of linear algebra",
+   "author": "3Blue1Brown",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "sTu3LwpF6XI": {
+   "ok": true,
+   "status": 200,
+   "title": "Making logic gates from transistors",
+   "author": "Ben Eater",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "tIeHLnjs5U8": {
+   "ok": true,
+   "status": 200,
+   "title": "Backpropagation calculus | Deep Learning Chapter 4",
+   "author": "3Blue1Brown",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  },
+  "wjZofJX0v4M": {
+   "ok": true,
+   "status": 200,
+   "title": "Transformers, the tech behind LLMs | Deep Learning Chapter 5",
+   "author": "3Blue1Brown",
+   "confirmed": "2026-11-22T08:46:06.776Z"
+  }
+ }
+}

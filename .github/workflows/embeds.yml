@@ -1,0 +1,90 @@
+# Twice a week: ask YouTube (public oEmbed, no key) whether every video in the demo paths can still
+# be embedded, and record it in data/availability.json. If anything changed, commit the file and
+# start "Deploy site", which marks unplayable videos and has the player skip them; if a video is
+# unplayable, open or update an issue labelled embeds so a person can pick a replacement.
+# Network trouble never fails the run: the last known result is kept and the next run retries.
+name: Embed check
+
+on:
+  schedule:
+    - cron: "37 5 * * 1"
+    - cron: "57 5 * * 4"
+    # TEMPORARY, self-limiting (22-23 November only): proves the schedule trigger fires on this
+    # account. Remove after the first scheduled run passes (OPERATIONS.md).
+    - cron: "43 1-23/3 22,23 11 *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+  issues: write
+
+concurrency:
+  group: embeds
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Check every demo video with YouTube
+        id: check
+        run: node scripts/check-embeds.mjs
+      - name: Commit the result and redeploy if anything changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ "${{ steps.check.outputs.changed }}" = "true" ]; then
+            npm ci --no-audit --no-fund
+            npm test
+            git add data/availability.json
+            git commit -m "Embed check: availability changed ($(date -u +%F))"
+            git pull --rebase -q origin main && git push -q origin HEAD:main
+            # Pushes made with this token start no workflow, so start the deploy explicitly.
+            gh workflow run pages.yml --repo "$GITHUB_REPOSITORY" --ref main
+          else
+            # Record the check time at most once a week, so the staleness check can tell the job is alive
+            # without a commit every run.
+            last=$(git log -1 --format=%ct -- data/availability.json 2>/dev/null || echo 0)
+            if [ $(( $(date +%s) - last )) -gt $(( 6 * 86400 )) ]; then
+              git add data/availability.json
+              git commit -q -m "Embed check: all demo videos checked ($(date -u +%F))" && git pull --rebase -q origin main && git push -q origin HEAD:main || echo "::warning::couldn't record the check time"
+            else
+              git checkout -- data/availability.json
+            fi
+          fi
+      - name: Open, update or close the embeds issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          UNPLAYABLE: ${{ steps.check.outputs.unplayable }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create embeds --color FBCA04 --description "Demo videos that can no longer be embedded" 2>/dev/null || true
+          open=$(gh issue list --label embeds --state open --json number --jq '.[0].number // empty')
+          if [ -z "$UNPLAYABLE" ]; then
+            if [ -n "$open" ]; then gh issue close "$open" --comment "Every demo video can be embedded again: $RUN_URL"; fi
+            exit 0
+          fi
+          list=$(for id in $UNPLAYABLE; do echo "- https://www.youtube.com/watch?v=$id"; done)
+          body=$(printf "These videos in the demo paths can no longer be played in an embedded player (removed, made private, or embedding switched off):\n\n%s\n\nThe site already marks them and the player skips them. To fix: replace each one in site/holes/*.json with another embeddable video on the same topic (check it with node scripts/check-embeds.mjs), run npm test, commit. See OPERATIONS.md, \"When a demo video stops being embeddable\".\n\nRun: %s" "$list" "$RUN_URL")
+          if [ -n "$open" ]; then gh issue comment "$open" --body "$body"; else gh issue create --title "Demo videos no longer embeddable" --label embeds --body "$body"; fi
+
+  keepalive:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Keep scheduled workflows enabled
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/keepalive.sh

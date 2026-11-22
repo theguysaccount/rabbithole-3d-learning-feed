@@ -1,0 +1,95 @@
+# Twice a week: check the live site in headless Chrome (every page, the player, swipes, the builder,
+# the embed, and the real YouTube player API), and check that neither the deploys nor the embed
+# check have stalled: a stale build starts "Deploy site", a stale embed check starts "Embed check".
+# A failure opens or updates an issue labelled self-test; the next pass closes it. Read-only for the
+# site, so it can never take it down, and safe to re-run.
+name: Live self-test
+
+on:
+  schedule:
+    - cron: "7 8 * * 3"
+    - cron: "13 9 * * 0"
+    # TEMPORARY, self-limiting (22-23 November only): proves the schedule trigger fires on this
+    # account. Remove after the first scheduled run passes (OPERATIONS.md).
+    - cron: "19 */2 22,23 11 *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  actions: write
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io/{1}', github.repository_owner, github.event.repository.name) }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Staleness checks (start a deploy or an embed check when one has stalled)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          start() { busy=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow "$1" --limit 5 --json status -q '[.[] | select(.status != "completed")] | length'); if [ "$busy" = "0" ]; then gh workflow run "$1" --repo "$GITHUB_REPOSITORY" --ref main; fi; }
+          json=$(curl -fsS "$SITE_URL/build.json?$RANDOM" || echo '{}')
+          built=$(echo "$json" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{console.log(JSON.parse(s).built||"")}catch{console.log("")}})')
+          if [ -n "$built" ]; then
+            age=$(( ( $(date +%s) - $(date -d "$built" +%s) ) / 86400 ))
+            echo "live build: $built ($age days old)"
+            if [ "$age" -gt 8 ]; then start pages.yml; echo "::warning::The live build was $age days old; started Deploy site."; fi
+          else echo "::warning::Couldn't read $SITE_URL/build.json"; fi
+          checked=$(node -e 'console.log(require("./data/availability.json").checked||"")')
+          cage=$(( ( $(date +%s) - $(date -d "$checked" +%s) ) / 86400 ))
+          echo "embed check: $checked ($cage days old)"
+          if [ "$cage" -gt 10 ]; then start embeds.yml; echo "::warning::The embed check was $cage days old; started Embed check."; fi
+      - name: Make sure Chrome is installed
+        run: |
+          if [ -x /usr/bin/google-chrome ]; then
+            echo "CHROME=/usr/bin/google-chrome" >> "$GITHUB_ENV"
+          else
+            npx --yes @puppeteer/browsers install chrome@stable --path "$RUNNER_TEMP/chrome" | tee "$RUNNER_TEMP/chrome.txt"
+            echo "CHROME=$(tail -1 "$RUNNER_TEMP/chrome.txt" | cut -d' ' -f2-)" >> "$GITHUB_ENV"
+          fi
+      - run: npm ci --no-audit --no-fund
+      - name: Self-test the live site
+        id: selftest
+        run: node scripts/selftest.mjs --url "$SITE_URL/" --report report.json --max-age-days 16 --real-youtube
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: live-selftest-report
+          path: report.json
+          retention-days: 60
+      - name: Open, update or close the self-test issue
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OUTCOME: ${{ steps.selftest.outcome }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create self-test --color B60205 --description "Live self-test of the site" 2>/dev/null || true
+          open=$(gh issue list --label self-test --state open --json number --jq '.[0].number // empty')
+          if [ "$OUTCOME" = "success" ]; then
+            if [ -n "$open" ]; then gh issue close "$open" --comment "Passing again: $RUN_URL"; fi
+            exit 0
+          fi
+          failed=$(node -e 'try{const r=require("./report.json");console.log(r.checks.filter(c=>!c.pass).map(c=>"- "+c.name+(c.detail?" ("+c.detail.slice(0,300)+")":"")).join("\n")||"- the self-test did not finish")}catch{console.log("- the self-test did not produce a report")}')
+          body=$(printf "The live self-test of %s failed on %s.\n\nFailed checks:\n%s\n\nRun: %s\n\nThe site itself is unchanged: this job only reads it. See OPERATIONS.md, \"When the live self-test fails\"." "$SITE_URL" "$(date -u +%Y-%m-%d)" "$failed" "$RUN_URL")
+          if [ -n "$open" ]; then gh issue comment "$open" --body "$body"; else gh issue create --title "Live self-test failing" --label self-test --body "$body"; fi
+
+  keepalive:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Keep scheduled workflows enabled
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/keepalive.sh

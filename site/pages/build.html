@@ -1,0 +1,52 @@
+<!--{"path":"/build/","title":"Build a branching video path from YouTube clips · Rabbit Hole","description":"Free builder for branching video: paste YouTube links, arrange a main track with go-deeper side paths, set start and end times, and share it all as one link or an embed. No account.","priority":0.9,"nav":"build/","script":"build","app":"Rabbit Hole builder","crumb":"Builder","pro":true,"howto":{"name":"How to build a branching video path from YouTube videos","steps":["Paste a YouTube link and press Add; it goes on the main track.","Press + Deeper on any clip to add videos to a side path under it.","Reorder clips by dragging them, or with the arrow buttons.","Set start and end times and a short note for any clip.","Copy the share link or the embed code."]}}-->
+<section class="prose wide">
+  <p class="crumbs"><a href="{{root}}">Rabbit Hole</a> › Builder</p>
+  <h1>Build a rabbit hole</h1>
+  <p class="lede">Paste YouTube links to make the main track. Press <b>+ Deeper</b> on any clip to add a side path under it. Everything is saved in this browser while you work, and the share link holds the finished path.</p>
+</section>
+<section class="builder" id="builder" data-watch="{{root}}watch/" data-embed-page="{{root}}embed/">
+  <div class="b-main">
+    <div class="b-meta">
+      <label>Title <input id="b-title" maxlength="100" placeholder="For example: How a neural network learns"></label>
+      <label>What it's about <span class="muted">(optional)</span> <textarea id="b-about" maxlength="400" rows="2" placeholder="One or two sentences for viewers"></textarea></label>
+    </div>
+    <form id="b-add" class="b-add" novalidate>
+      <label for="b-url">Add a YouTube video</label>
+      <div class="row"><input id="b-url" type="text" inputmode="url" autocomplete="off" placeholder="Paste a YouTube link (watch, youtu.be or shorts)"><button class="btn primary" type="submit">Add</button></div>
+      <p class="b-target" id="b-target" hidden>Adding to the deeper track under <b id="b-target-name"></b> · <button class="linklike" type="button" id="b-target-cancel">add to the main track instead</button></p>
+      <p class="b-error" id="b-error" role="alert"></p>
+    </form>
+    <div class="b-toolbar"><span id="b-stats" class="muted"></span><span><button class="btn small ghost" type="button" id="b-undo" disabled>Undo</button> <button class="btn small ghost" type="button" id="b-clear">New</button></span></div>
+    <div class="b-empty" id="b-empty">
+      <p><b>Nothing here yet.</b> Paste a YouTube link above, or start from a demo:</p>
+      <p><button class="btn small" type="button" data-start="how-neural-networks-learn">How a neural network learns</button> <button class="btn small" type="button" data-start="how-computers-work">How computers work</button> <button class="btn small" type="button" data-start="linear-algebra-visually">Linear algebra, visually</button></p>
+    </div>
+    <div class="b-tree" id="b-tree"></div>
+    <p class="hint">Drag a clip by ⠿ onto another: near its top or bottom edge to put it before or after, onto its middle to put it in that clip's deeper track. Or use ↑ ↓, and ⇥ / ⇤ to move a clip into or out of a deeper track.</p>
+  </div>
+  <aside class="b-side">
+    <div class="b-share">
+      <h2>Share</h2>
+      <label class="sr" for="b-link">Share link</label>
+      <input id="b-link" readonly placeholder="Add a video to get a link">
+      <p><button class="btn primary" type="button" id="b-copy" disabled>Copy link</button> <a class="btn" id="b-open" href="#" target="_blank" rel="noopener" disabled>Open</a> <button class="btn ghost" type="button" id="b-embed" disabled>Embed</button></p>
+      <p class="muted small" id="b-size"></p>
+      <div id="b-embed-box" hidden><label>Paste this into your site's HTML:<textarea readonly rows="4"></textarea></label></div>
+      <p class="small"><button class="linklike" type="button" id="b-download" disabled>Download as a file</button> · <button class="linklike" type="button" id="b-import">Open a file</button><input type="file" id="b-import-file" accept="application/json,.json" hidden></p>
+      <p class="b-msg" id="b-msg" role="status" aria-live="polite"></p>
+    </div>
+    <div class="b-preview">
+      <h2>Preview</h2>
+      <div id="player" class="rh-root"><p class="muted">Add a video and the preview appears here.</p></div>
+    </div>
+  </aside>
+</section>
+<section class="band prose">
+  <h2>Good to know</h2>
+  <ul>
+    <li><b>Only embeddable videos work.</b> The builder asks YouTube about each link and refuses videos whose owners don't allow embedding.</li>
+    <li><b>Nothing is uploaded.</b> The path lives in your browser and in the link you share. Anyone with the link can watch it; to change it, edit and share a new link.</li>
+    <li><b>Keep the main track short.</b> Five to eight clips is plenty. Put background, maths and examples in deeper tracks so viewers choose them.</li>
+    <li><b>Use start and end times</b> to cut a long video down to the minute that answers the question.</li>
+  </ul>
+</section>

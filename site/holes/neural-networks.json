@@ -1,0 +1,26 @@
+{
+  "slug": "how-neural-networks-learn",
+  "title": "How a neural network learns",
+  "about": "3Blue1Brown's deep learning series as a rabbit hole. The main track goes from neurons to transformers; go deeper wherever the maths gets ahead of you.",
+  "description": "A branching path through 3Blue1Brown's videos on neural networks: what a network is, gradient descent, backpropagation and transformers, with side paths into the linear algebra and calculus underneath.",
+  "track": [
+    { "id": "nn1", "yt": "aircAruvnKk", "title": "But what is a neural network?", "note": "Start here: neurons, layers and weights, with handwritten-digit recognition as the running example.",
+      "deeper": [
+        { "id": "la1", "yt": "fNk_zzaMoSs", "title": "Vectors (Essence of linear algebra, chapter 1)", "note": "Rusty on vectors? This is the picture everything else builds on." },
+        { "id": "la3", "yt": "kYB8IZa5AuE", "title": "Linear transformations and matrices (chapter 3)", "note": "Why one layer of a network is a matrix multiplication." }
+      ] },
+    { "id": "nn2", "yt": "IHZwWFHWa-w", "title": "Gradient descent, how neural networks learn", "note": "The cost function, and how a network improves by walking downhill on it.",
+      "deeper": [
+        { "id": "ca1", "yt": "WUvTyaaNkzM", "title": "The essence of calculus", "note": "The intuition for derivatives that gradient descent depends on." },
+        { "id": "ca2", "yt": "9vKqVkMQHKk", "title": "The paradox of the derivative (Essence of calculus, chapter 2)", "note": "What an instantaneous rate of change really means." }
+      ] },
+    { "id": "nn3", "yt": "Ilg3gGewQ5U", "title": "Backpropagation, intuitively", "note": "How the network works out which weights to nudge, and by how much.",
+      "deeper": [
+        { "id": "nn4", "yt": "tIeHLnjs5U8", "title": "Backpropagation calculus", "note": "The same idea with the chain rule written out." }
+      ] },
+    { "id": "nn5", "yt": "wjZofJX0v4M", "title": "Transformers, the tech behind LLMs", "note": "From recognising digits to predicting the next word: the architecture behind large language models.",
+      "deeper": [
+        { "id": "nn6", "yt": "eMlx5fFNoYc", "title": "Attention in transformers, step-by-step", "note": "The mechanism that lets each word look at every other word." }
+      ] }
+  ]
+}
