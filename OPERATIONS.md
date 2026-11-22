@@ -1,8 +1,8 @@
 # OPERATIONS
 
-Rabbit Hole runs with no human and no server. Every recurring task is a GitHub Actions job in this repository. The site is a static GitHub Pages deployment at https://theguysaccount.github.io/rabbithole-3d-learning-feed/. Rabbit holes live in their share links, and videos play from YouTube, so there is nothing to store, host or back up.
+Rabbit Hole runs with no human and no server. Every recurring task is a GitHub Actions job in this repository. The site is a static GitHub Pages deployment at https://videos.entermyrabbithole.com/ (a custom domain since 22 November 2026; https://theguysaccount.github.io/rabbithole-3d-learning-feed/ redirects there). Rabbit holes live in their share links, and videos play from YouTube, so there is nothing to store, host or back up.
 
-**The site's address is one setting:** the repository variable `SITE_URL`. Empty means the GitHub Pages address above. The build, canonical URLs, sitemap, share links, embed codes, IndexNow and the live checks all read it.
+**The site's address is one setting:** the repository variable `SITE_URL`. Empty means the GitHub Pages address, https://theguysaccount.github.io/rabbithole-3d-learning-feed/. The build, canonical URLs, sitemap, share links, embed codes, IndexNow and the live checks all read it.
 
 ## Automated jobs
 
@@ -41,7 +41,11 @@ GitHub fires schedules on this account hours late and sometimes not at all. No j
 
 None of these is needed for the site to work.
 
-### 1. Custom domain (the "domain rollout" session handles this; nothing here changes DNS)
+### 1. Custom domain (done: videos.entermyrabbithole.com)
+
+**Live since 22 November 2026**, set up by the "domain rollout" session: one DNS record at Namecheap, `CNAME videos → theguysaccount.github.io.`; the Pages custom domain `videos.entermyrabbithole.com` with HTTPS enforced; and `SITE_URL=https://videos.entermyrabbithole.com`. entermyrabbithole.com and its `www` still serve their separate site, untouched. What follows is the record of why and how, and the steps for any later move.
+
+Before any later move: builder drafts are kept in the browser for one address, so an unfinished draft doesn't follow the site. Shared paths do, because the whole path is in the link: put the new host in front of a link's `watch/#h=...` part and it opens there.
 
 **Don't point entermyrabbithole.com itself at this site.** On 2026-11-22 it already served a live site ("Rabbit Hole — One thing led to another", a trail-of-sources product: `www` is a Vercel CNAME, the apex is A `216.150.1.1`, DNS at Namecheap). Under the "never replace, only build on top" rule, the natural home for this tool is a subdomain of it, linked from that site, for example `videos.entermyrabbithole.com`. Also mentioned in Jack's notes: `myrabbithole.com` (resolves to AWS addresses, NameBright DNS) and `rabbithole.me` (GoDaddy DNS); ownership unconfirmed, so leave them alone.
 
@@ -82,7 +86,7 @@ Importing a whole playlist needs the YouTube Data API, which needs an API key fr
 ```bash
 npm ci && npm test                                            # unit and build tests
 npm run build && node scripts/selftest.mjs                    # build + headless end-to-end (stand-in YouTube)
-node scripts/selftest.mjs --url https://theguysaccount.github.io/rabbithole-3d-learning-feed/ --real-youtube   # live check
+node scripts/selftest.mjs --url https://videos.entermyrabbithole.com/ --real-youtube   # live check
 node scripts/check-embeds.mjs                                 # ask YouTube about every demo video
 node scripts/make-images.mjs                                  # redraw the share card and icon
 ```

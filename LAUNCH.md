@@ -2,13 +2,13 @@
 
 ## What's live
 
-- https://theguysaccount.github.io/rabbithole-3d-learning-feed/ (GitHub Pages, deployed by `.github/workflows/pages.yml`)
+- https://videos.entermyrabbithole.com/ (GitHub Pages with a custom domain, deployed by `.github/workflows/pages.yml`; https://theguysaccount.github.io/rabbithole-3d-learning-feed/ redirects there)
 - Pages: home with a playable demo, builder, three demo paths, "branching video" and "interactive YouTube playlist" landing pages, privacy, guides (one more each Monday until 28 December 2026). Watch and embed players are noindex.
 - Search plumbing: sitemap (listed by the account's root robots.txt, rebuilt daily by the `theguysaccount.github.io` repo), IndexNow on every deploy, canonical URLs, JSON-LD (WebApplication, HowTo, FAQPage, ItemList, Article, BreadcrumbList), Open Graph card.
 
 ## Custom domain
 
-Nothing here changes DNS. entermyrabbithole.com already runs a separate live site, so the recommended home is a subdomain such as videos.entermyrabbithole.com, set through the one setting `SITE_URL`. Exact records and commands: OPERATIONS.md, key 1.
+Live at videos.entermyrabbithole.com since 22 November 2026. The domain rollout session added one subdomain record and set `SITE_URL`. entermyrabbithole.com itself still runs its separate site, untouched. Records and steps: OPERATIONS.md, key 1.
 
 ## First 1,000 users: machine channels (running)
 

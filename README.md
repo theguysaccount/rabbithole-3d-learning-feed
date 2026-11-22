@@ -1,6 +1,6 @@
 # Rabbit Hole: branching video paths from YouTube clips
 
-**Live:** https://theguysaccount.github.io/rabbithole-3d-learning-feed/
+**Live:** https://videos.entermyrabbithole.com/ (the GitHub Pages address, https://theguysaccount.github.io/rabbithole-3d-learning-feed/, redirects there)
 
 Video feeds only go down. A rabbit hole goes deeper: arrange YouTube videos into a **main track**, and hang **deeper tracks** off any clip for viewers who want more. Viewers swipe up for the next clip, left to go deeper and right to back out (or use the arrow keys and buttons), with a map of the whole path beside the video. The builder runs in the browser, and the finished path is stored inside its share link, so there's no account, server or database.
 
@@ -24,7 +24,7 @@ npm run serve              # serves dist/ at that address
 ```bash
 npm test                                   # unit and build tests (Node only)
 npm run build && node scripts/selftest.mjs # headless Chrome with a stand-in YouTube player: pages, player, swipes, builder, embed
-node scripts/selftest.mjs --url https://theguysaccount.github.io/rabbithole-3d-learning-feed/ --real-youtube   # the live site and the real YouTube API
+node scripts/selftest.mjs --url https://videos.entermyrabbithole.com/ --real-youtube   # the live site and the real YouTube API
 ```
 
 ## Deploy
